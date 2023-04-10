@@ -17,7 +17,8 @@ def home(request):
 
 def products(request):
 	products = Product.objects.all()
-	return render(request, 'crm_app/products.html')
+	context = {'products':products}
+	return render(request, 'crm_app/products.html',context)
 
 def customer(request,pk_test):
 	customer = Customer.objects.get(id=pk_test)
@@ -63,6 +64,24 @@ def createCustomer(request):
 			form.save()
 			return redirect('/')
 	context = {'form':form}
-	return render(request,'crm_app/create_customer.html',context)
+	return render(request,'crm_app/customerform.html',context)
 
 
+def updateCustomer(request,pk):
+	customer = Customer.objects.get(id=pk)
+	form = CreateCustomerForm(instance=customer)
+	if request.method == 'POST':
+		form = CreateCustomerForm(request.POST,instance=customer)
+		if form.is_valid():
+			form.save()
+			return redirect('/')
+	context = {'form':form}
+	return render(request,'crm_app/customerform.html',context)
+
+def deleteCustomer(request,pk):
+	customer = Customer.objects.get(id=pk)
+	if request.method == 'POST':
+		customer.delete()
+		return redirect('/')
+	context = {'item':customer}
+	return render(request,'crm_app/delete.html',context)

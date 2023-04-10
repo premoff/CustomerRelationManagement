@@ -5,8 +5,8 @@
 <form action="" method="POST">
     {% csrf_token %}
     <p>Are you sure to delete {{item}}</p>
-    <input type="submit" value="submit">
+    <a class="btn btn-sm btn-info" href="{% url 'home' %}">Cancel</a>
+    <input class="btn btn-sm btn-danger" type="submit" value="Confirm">
 </form>
-
 
 {% endblock %}
