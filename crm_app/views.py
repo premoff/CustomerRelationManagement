@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .models import *
 from .forms import OrderForm,CreateCustomerForm
+from .filters import *
 # Create your views here.
 
 
@@ -24,7 +25,9 @@ def customer(request,pk_test):
 	customer = Customer.objects.get(id=pk_test)
 	orders = customer.order_set.all()
 	order_count = orders.count()
-	context = {'customer':customer,'orders':orders,'order_count':order_count}
+	myfilter = OrderFilter(request.GET,queryset=orders)
+	orders = myfilter.qs
+	context = {'customer':customer,'orders':orders,'order_count':order_count,'myfilter':myfilter}
 	return render(request, 'crm_app/customer.html',context)
 
 def createOrder(request):
