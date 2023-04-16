@@ -13,10 +13,13 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'products'  %}">Products</a>
         </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'settings'  %}">Settings</a>
+        </li>
         {% endif %}
       </ul>
     </div>
-    <span>Hello, {{request.user}}</span>
-    <span><a href="{% url 'logout' %}">Logout</a></span>
-
+    <span style="color: aliceblue;">Hello, {{request.user}}</span>
+    <span><a class="nav-item nav-link" style="color:aliceblue" href="{% url 'logout' %}">Logout</a></span>
   </nav>

@@ -23,6 +23,10 @@ def registerpage(request):
 			#add into customer group during account creation
 			group = Group.objects.get(name='customer') 
 			user.groups.add(group)
+			# OneToOne relationship
+			Customer.objects.create(
+				user=user,name=user.username,
+			)
 			#showing flash messages form account creation
 			messages.success(request,'Account was created for '+ username) #show flash message with username
 			return redirect('login')
@@ -75,6 +79,19 @@ def userpage(request):
 	pending = orders.filter(status='Pending').count()
 	context = {'orders':orders,'total_orders':total_orders,'delivered':delivered,'pending':pending}
 	return render(request,'crm_app/user.html',context)
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['customer'])
+def settings(request):
+	customer = request.user.customer
+	form = CreateCustomerForm(instance=customer)
+	if request.method == 'POST':
+		form = CreateCustomerForm(request.POST,request.FILES,instance=customer)
+		if form.is_valid():
+			form.save
+	context = {'form':form}
+	return render(request,'crm_app/account_settings.html',context)
 
 #creating products page view function
 @login_required(login_url='login')
